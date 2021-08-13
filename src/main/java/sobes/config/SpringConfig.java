@@ -12,7 +12,7 @@ import sobes.bean_scope_example.Person;
 
 
 @Configuration
-@ComponentScan("sobes.bean_scope_example")
+@ComponentScan("sobes")
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
