@@ -14,52 +14,54 @@ public class Queries {
             "INNER JOIN country ON code=CountryCode\n" +
             "GROUP BY CountryCode\n" +
             "HAVING count(*)>?";
-    public static final String sql3 = "SELECT country.name,countrycode,country.continent\n" +
-            "FROM countrylanguage\n" +
-            "INNER JOIN country on code=countrycode\n" +
+    public static final String sql3 = "SELECT c.name," +
+            "                          cl.countrycode," +
+            "                          c.continent\n" +
+            "FROM countrylanguage cl\n" +
+            "INNER JOIN country c on code=countrycode\n" +
             "INNER JOIN (SELECT name\n" +
             "\t\t\tFROM countrylanguage\n" +
             "            INNER JOIN country on code=countrycode\n" +
-            "            WHERE language=?) as fr on fr.name=country.name\n" +
+            "            WHERE language=?) as fr on fr.name=c.name\n" +
             "INNER JOIN (SELECT name\n" +
             "\t\t\tFROM countrylanguage\n" +
             "            INNER JOIN country on code=countrycode\n" +
             "            GROUP BY name\n" +
-            "            HAVING count(*)=2) as cnt on cnt.name=country.name\n" +
+            "            HAVING count(*)=2) as cnt on cnt.name=c.name\n" +
             "WHERE language=?";
-    public static final String sql4 = "SELECT name,Population,country.continent,country.surfacearea\n" +
-            "FROM country\n" +
+    public static final String sql4 = "SELECT c.name,c.Population,c.continent,c.surfacearea\n" +
+            "FROM country c\n" +
             "WHERE population>?";
-    public static final String sql5 = "SELECT country.name,\n" +
-            "\t   country.Capital,\n" +
-            "       city.population as CapitalPopulation,\n" +
-            "       country.population as CountryPopulation,\n" +
-            "       country.SurfaceArea\n" +
-            "FROM country\n" +
-            "INNER JOIN city ON Capital=id\n" +
-            "WHERE city.Population>country.Population-city.Population";
-    public static final String sql6 = "SELECT DISTINCT country.name,\n" +
-            "\t\t\t\tcountry.Continent,\n" +
-            "                country.Region,\n" +
-            "                country.Population,\n" +
-            "                country.SurfaceArea,\n" +
-            "                country.Capital\n" +
-            "FROM world.countrylanguage\n" +
-            "INNER JOIN country ON code=CountryCode\n" +
+    public static final String sql5 = "SELECT c.name,\n" +
+            "\t   c.Capital,\n" +
+            "       ct.population as CapitalPopulation,\n" +
+            "       c.population as CountryPopulation,\n" +
+            "       c.SurfaceArea\n" +
+            "FROM country c\n" +
+            "INNER JOIN city ct ON Capital=id\n" +
+            "WHERE ct.Population>c.Population-ct.Population";
+    public static final String sql6 = "SELECT DISTINCT c.name,\n" +
+            "\t\t\t\tc.Continent,\n" +
+            "                c.Region,\n" +
+            "                c.Population,\n" +
+            "                c.SurfaceArea,\n" +
+            "                c.Capital\n" +
+            "FROM world.countrylanguage cl\n" +
+            "INNER JOIN country c ON code=CountryCode\n" +
             "WHERE name NOT IN(SELECT name\n" +
             "\t\t\t\t  FROM countrylanguage\n" +
             "                  INNER JOIN country ON code=CountryCode\n" +
             "                  WHERE language=?)";
-    public static final String sql7 = "SELECT country.name,\n" +
-            "       country.Continent,\n" +
-            "       country.region,\n" +
-            "       country.HeadOfState,\n" +
-            "       country.GovernmentForm,\n" +
-            "       city.Name as Capital,\n" +
-            "       country.population\n" +
-            "FROM countrylanguage\n" +
-            "INNER JOIN country ON code=countrycode\n" +
-            "INNER JOIN city ON capital=id\n" +
+    public static final String sql7 = "SELECT c.name,\n" +
+            "       c.Continent,\n" +
+            "       c.region,\n" +
+            "       c.HeadOfState,\n" +
+            "       c.GovernmentForm,\n" +
+            "       ct.Name as Capital,\n" +
+            "       c.population\n" +
+            "FROM countrylanguage cl\n" +
+            "INNER JOIN country c ON code=countrycode\n" +
+            "INNER JOIN city ct ON capital=id\n" +
             "GROUP BY name\n" +
             "HAVING count(*)=(SELECT MAX(languageCount)\n" +
             "\t\t\t\t FROM (SELECT name,count(*) as languageCount\n" +
